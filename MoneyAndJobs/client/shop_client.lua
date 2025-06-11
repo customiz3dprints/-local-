@@ -35,6 +35,31 @@ RegisterCommand("MoneyAndJobs:shop", function ()
                     end
                 end)
             end
+        },
+        {
+            title = "CocaCola",  
+            description = "You can buy a coke with 20$",
+            onSelect = function ()
+                lib.callback("MoneyAndJobs:ShopBuy", false, function (balance)
+                    if balance < 20 then
+                        lib.notify({
+                            type = "error",
+                            title = "Not enough funds",
+                            description = "You don't have enough to buy this, you have: "..balance.."$",
+                            icon = "hand"
+                        })
+                    else
+                        lib.notify({
+                            type = "success",
+                            title = "Bought a car",
+                            description = "Bought a car, left with ".. balance-20 .. "$"
+                        })
+                        SenderID = PlayerId()
+                        TriggerServerEvent("MoneyAndJobs:buy", SenderID, balance-20, "")
+                        TriggerEvent("StatusEffects:SetThirst", playerID, 100.0)
+                    end
+                end)
+            end
         }
     }})
     lib.showContext("shop")
